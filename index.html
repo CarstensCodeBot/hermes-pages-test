@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes Agenten Team</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #16161f;
+            --bg-card-hover: #1e1e2a;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --accent-bright: #818cf8;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(99, 102, 241, 0.3);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --radius: 16px;
+        }
+        
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5rem 1.5rem;
+        }
+        
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .header-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent);
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        
+        /* Agent Grid */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Agent Card */
+        .agent-card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                var(--accent-glow) 50%,
+                transparent 100%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .agent-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg), 0 0 40px var(--accent-glow);
+        }
+        
+        .agent-card:hover::before {
+            opacity: 1;
+        }
+        
+        .agent-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Agent Icon */
+        .agent-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+            transition: all 0.35s ease;
+        }
+        
+        .agent-card:hover .agent-icon {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Agent Name */
+        .agent-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Agent Role Tag */
+        .agent-role {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--accent-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 0.25rem 0.625rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        /* Agent Description */
+        .agent-description {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+        
+        /* Specific accent variations per agent */
+        .agent-card.jarvis { --accent: #6366f1; --accent-glow: rgba(99, 102, 241, 0.15); --accent-bright: #818cf8; }
+        .agent-card.reach { --accent: #0ea5e9; --accent-glow: rgba(14, 165, 233, 0.15); --accent-bright: #38bdf8; }
+        .agent-card.codi { --accent: #10b981; --accent-glow: rgba(16, 185, 129, 0.15); --accent-bright: #34d399; }
+        .agent-card.beau { --accent: #ec4899; --accent-glow: rgba(236, 72, 153, 0.15); --accent-bright: #f472b6; }
+        .agent-card.checker { --accent: #f59e0b; --accent-glow: rgba(245, 158, 11, 0.15); --accent-bright: #fbbf24; }
+        
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            body {
+                padding: 3rem 1rem;
+            }
+            
+            .agent-card {
+                padding: 1.5rem;
+            }
+            
+            .agent-grid {
+                gap: 1rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .agent-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .agent-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-badge">Hermes Framework</div>
+            <h1>Das Agenten-Team</h1>
+            <p class="subtitle">Fünf spezialisierte KI-Agenten. Eine gemeinsame Vision. <br>Unbegrenzte Möglichkeiten.</p>
+        </header>
+        
+        <div class="agent-grid">
+            <!-- Jarvis -->
+            <article class="agent-card jarvis">
+                <div class="agent-icon">🎯</div>
+                <h2 class="agent-name">Jarvis</h2>
+                <span class="agent-role">Orchestrierung</span>
+                <p class="agent-description">Der Master of Ceremonies. Koordiniert alle Agenten, verwaltet das Interface und sorgt für einen reibungslosen Ablauf.</p>
+            </article>
+            
+            <!-- Reach -->
+            <article class="agent-card reach">
+                <div class="agent-icon">🔍</div>
+                <h2 class="agent-name">Reach</h2>
+                <span class="agent-role">Wissen & News</span>
+                <p class="agent-description">Der Research-Experte. Durchforstet das Web nach aktuellen Informationen und liefert fundierte Erkenntnisse.</p>
+            </article>
+            
+            <!-- Codi -->
+            <article class="agent-card codi">
+                <div class="agent-icon">⚡</div>
+                <h2 class="agent-name">Codi</h2>
+                <span class="agent-role">Code & Entwicklung</span>
+                <p class="agent-description">Der Coding-Wizard. Schreibt, debuggt und optimiert Code mit Präzision und technischer Exzellenz.</p>
+            </article>
+            
+            <!-- Beau -->
+            <article class="agent-card beau">
+                <div class="agent-icon">✨</div>
+                <h2 class="agent-name">Beau</h2>
+                <span class="agent-role">Design & UX</span>
+                <p class="agent-description">Der Kreative Visionär. Gestaltet visuelle Erlebnisse, die nicht nur schön, sondern auch intuitiv sind.</p>
+            </article>
+            
+            <!-- Checker -->
+            <article class="agent-card checker">
+                <div class="agent-icon">🛡️</div>
+                <h2 class="agent-name">Checker</h2>
+                <span class="agent-role">Qualitätssicherung</span>
+                <p class="agent-description">Der kritische Prüfer. Sicherstellt Qualität, Validierung und dass alles den höchsten Standards entspricht.</p>
+            </article>
+        </div>
+        
+        <footer class="footer">
+            <p>Powered by Hermes Agent Framework</p>
+        </footer>
+    </div>
+</body>
+</html>
